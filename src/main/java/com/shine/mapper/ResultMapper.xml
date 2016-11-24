@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shine.dao.ims.ResultDao" >
+  <resultMap id="BaseResultMap" type="com.shine.entity.ims.Result" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="params" property="params" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="expectation" property="expectation" jdbcType="VARCHAR" />
+    <result column="port" property="port"  jdbcType="BIGINT"/>
+    <result column="ip" property="ip" jdbcType="VARCHAR" />
+    <result column="serverId" property="serverId" jdbcType="BIGINT" />
+    <result column="cazeName" property="cazeName" jdbcType="VARCHAR" />
+    <result column="cazeId" property="cazeId" jdbcType="BIGINT" />
+    <result column="groupName" property="groupName" jdbcType="VARCHAR" />
+    <result column="groupId" property="groupId" jdbcType="BIGINT" />
+    <result column="urlName" property="urlName" jdbcType="VARCHAR" />
+    <result column="urlId" property="urlId" jdbcType="BIGINT" />
+    <result column="applicationName" property="applicationName" jdbcType="VARCHAR" />
+    <result column="applicationId" property="applicationId" jdbcType="BIGINT" />
+    <result column="result" property="result" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,name,params,status,url,expectation,port,ip,serverId,cazeName,cazeId,groupName,groupId,urlName,urlId,applicationName,applicationId,result
+  </sql>
+  
+  <insert id="addResult" parameterType="com.shine.entity.ims.Result" >
+    insert into result(name,params,status,url,expectation,port,ip,serverId,cazeName,cazeId,groupName,groupId,urlName,urlId,applicationName,applicationId,result)values
+    (#{name,jdbcType=VARCHAR},#{params,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},#{url,jdbcType=VARCHAR},#{expectation,jdbcType=VARCHAR},#{port,jdbcType=BIGINT},
+    #{ip,jdbcType=VARCHAR},#{serverId,jdbcType=BIGINT},#{cazeName,jdbcType=VARCHAR},#{cazeId,jdbcType=BIGINT},#{groupName,jdbcType=VARCHAR},#{groupId,jdbcType=BIGINT},
+    #{urlName,jdbcType=VARCHAR},#{urlId,jdbcType=BIGINT},#{applicationName,jdbcType=VARCHAR},#{applicationId,jdbcType=BIGINT},#{result,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateResult" parameterType="com.shine.entity.ims.Result" >
+    update result
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="params != null" >
+        params = #{params,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="expectation != null" >
+        expectation = #{expectation,jdbcType=VARCHAR},
+      </if>
+      <if test="port != null" >
+        port = #{port,jdbcType=BIGINT},
+      </if>
+      <if test="ip != null" >
+        ip = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="serverId != null" >
+        serverId = #{serverId,jdbcType=BIGINT},
+      </if>
+      <if test="cazeName != null" >
+        cazeName = #{cazeName,jdbcType=VARCHAR},
+      </if>
+      <if test="cazeId != null" >
+        cazeId = #{cazeId,jdbcType=BIGINT},
+      </if>
+      <if test="groupName != null" >
+        groupName = #{groupName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null" >
+        groupId = #{groupId,jdbcType=BIGINT},
+      </if>
+      <if test="urlName != null" >
+        urlName = #{urlName,jdbcType=VARCHAR},
+      </if>
+      <if test="urlId != null" >
+        urlId = #{urlId,jdbcType=BIGINT},
+      </if>
+      <if test="applicationName != null" >
+        applicationName = #{applicationName,jdbcType=VARCHAR},
+      </if>
+      <if test="applicationId != null" >
+        applicationId = #{applicationId,jdbcType=BIGINT},
+      </if>
+      <if test="result != null" >
+        result = #{result,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+   <delete id="delete">
+  	 DELETE FROM result WHERE id in
+  	 <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+  	 	#{item}
+  	 </foreach>
+  	</delete>
+  	 
+  <select id="findResultById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select * from result where id=#{id}
+  </select>
+  
+  <sql id="whereStatement">
+  	<where>
+    	1=1
+    </where>
+  </sql> 
+  
+  <select id="searchResult" resultType="com.shine.entity.ims.Result" >
+    select a.* from (select 
+    <include refid="Base_Column_List" />
+    from result
+    <include refid="whereStatement" />
+    ) a
+  </select>
+	
+	 
+</mapper>

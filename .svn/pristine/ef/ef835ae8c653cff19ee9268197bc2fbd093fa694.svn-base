@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shine.dao.FunctionDao" >
+  <resultMap id="BaseResultMap" type="com.shine.entity.ims.Function" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,name,content,type
+  </sql>
+  
+  <insert id="insertFunction" parameterType="com.shine.entity.ims.Function" >
+    insert into function(name,content,type)values
+    (#{name,jdbcType=VARCHAR},#{content,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateFunction" parameterType="com.shine.entity.ims.Function" >
+    update function
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+   <delete id="deleteFunction">
+  	 DELETE FROM function WHERE id in
+  	 <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+  	 	#{item}
+  	 </foreach>
+  	</delete>
+  	
+  	<sql id="whereStatement">
+  	<where>
+    	1=1
+    </where>
+  </sql> 
+  	 
+  <select id="findFunctionById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select * from function where id=#{id}
+  </select>
+  
+  <select id="All" resultMap="BaseResultMap" parameterType="com.shine.core.utils.page.Page">
+    select a.* from (select 
+    <include refid="Base_Column_List" />
+    from function
+    <include refid="whereStatement" />
+    ) a
+  </select>
+	
+	 
+</mapper>

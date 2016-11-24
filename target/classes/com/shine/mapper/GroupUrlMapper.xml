@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shine.dao.ims.GroupUrlDao" >
+  <resultMap id="BaseResultMap" type="com.shine.entity.ims.GroupUrl" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="urlId" property="urlId" jdbcType="BIGINT" />
+    <result column="groupId" property="groupId" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,urlId,groupId
+  </sql>
+  
+  
+  <insert id="addGroupUrl"  useGeneratedKeys="true" keyProperty="id" parameterType="com.shine.entity.ims.GroupUrl" >
+    insert into ims.group_url(urlId,groupId)values
+    (#{urlId,jdbcType=VARCHAR},#{groupId,jdbcType=BIGINT})
+  </insert>
+  <update id="updateGroupUrl" parameterType="com.shine.entity.ims.GroupUrl" >
+    update ims.group_url
+    <set >
+      <if test="urlId != null" >
+        urlId = #{urlId,jdbcType=BIGINT},
+      </if>
+      <if test="groupId != null" >
+        groupId = #{groupId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+    <delete id="deleteGroupUrl">
+  	 DELETE FROM ims.group_url WHERE id in
+  	 <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+  	 	#{item}
+  	 </foreach>
+  	 </delete>
+  	 
+  	<select id="findGroupUrlById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select * from ims.group_url where id=#{id}
+  </select>
+  
+  <sql id="whereStatement">
+  	<where>
+    	1=1
+    </where>
+  </sql> 
+  
+  <select id="searchGroupUrl" resultType="com.shine.entity.ims.GroupUrl">
+    select a.* from (select 
+    <include refid="Base_Column_List" />
+    from ims.group_url
+     <include refid="whereStatement" /> 
+    ) a
+  </select>
+  
+</mapper>

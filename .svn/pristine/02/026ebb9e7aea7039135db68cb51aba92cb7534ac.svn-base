@@ -1,0 +1,50 @@
+package com.shine.view.controller.ims;
+
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestMapping;
+import com.shine.core.utils.page.Page;
+import com.shine.core.exception.ResponseResult;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.shine.entity.ims.Server;
+import com.shine.view.service.ims.ServerService;
+import com.shine.condition.ims.ServerCondition;
+import org.springframework.beans.factory.annotation.Autowired;
+
+@Controller
+@RequestMapping("/resources/ims/server")
+public class ServerController{
+
+    @Autowired
+    private ServerService serverService;
+
+    @ResponseBody
+    @RequestMapping(method=RequestMethod.POST)
+    public ResponseResult addServer(@RequestBody Server server){
+    	serverService.addServer(server);
+	 	return ResponseResult.createSuccess(server);
+    }
+
+    @ResponseBody
+    @RequestMapping(method=RequestMethod.GET)
+    public ResponseResult findServerById(Integer id){
+    	Server server = serverService.findServerById(id);
+    	return ResponseResult.createSuccess(server);
+    }
+
+    @ResponseBody
+    @RequestMapping(method=RequestMethod.PUT)
+    public ResponseResult updateServer(@RequestBody Server server){
+    	serverService.updateServer(server);
+    	return ResponseResult.createSuccess(server);
+    }
+
+    @ResponseBody
+    @RequestMapping(value="search",method=RequestMethod.GET)
+    public ResponseResult searchServer(ServerCondition condition){
+        Page<Server> server = serverService.searchServer(condition);
+        return ResponseResult.createSuccess(server);
+    }
+}

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shine.dao.ims.CazeParamDao" >
+  <resultMap id="BaseResultMap" type="com.shine.entity.ims.CazeParam" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="cazeId" property="cazeId" jdbcType="BIGINT" />
+    <result column="paramDefId" property="paramDefId" jdbcType="BIGINT" />
+    <result column="value" property="value" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id,cazeId,paramDefId,value
+  </sql>
+  
+  <insert id="insertCazeParam" parameterType="com.shine.entity.ims.CazeParam" >
+    insert into caze_param(cazeId,paramDefId,value)values
+    (#{cazeId,jdbcType=BIGINT},#{paramDefId,jdbcType=BIGINT},#{value,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateCazeParam" parameterType="com.shine.entity.ims.CazeParam" >
+    update caze_param
+    <set >
+      <if test="cazeId != null" >
+        cazeId = #{cazeId,jdbcType=BIGINT},
+      </if>
+      <if test="paramDefId != null" >
+        paramDefId = #{paramDefId,jdbcType=BIGINT},
+      </if>
+      <if test="value != null" >
+        value = #{value,jdbcType=VARCHAR},
+      </if>
+      
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+   <delete id="deleteCazeParam">
+  	 DELETE FROM caze_param WHERE id in
+  	 <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+  	 	#{item}
+  	 </foreach>
+  	</delete>
+  	 
+  <select id="findCazeParamById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select * from caze_param where id=#{id}
+  </select>
+  
+  <sql id="whereStatement">
+  	<where>
+    	1=1
+    	
+    </where>
+  </sql>
+  
+  <select id="All" resultMap="BaseResultMap" parameterType="com.shine.core.utils.page.Page">
+    select a.* from (select 
+    <include refid="Base_Column_List" />
+    from caze_param
+    <include refid="whereStatement" />
+    ) a
+  </select> 
+</mapper>

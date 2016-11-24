@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shine.dao.ims.ApplicationDao" >
+  <resultMap id="BaseResultMap" type="com.shine.entity.ims.Application" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="basePath" property="basePath" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,name,code,description,basePath
+  </sql>
+  
+  
+  <insert id="addApplication"   useGeneratedKeys="true" keyProperty="id"  parameterType="com.shine.entity.ims.Application" >
+    insert into application(name,code,description,basePath)values
+    (#{name,jdbcType=VARCHAR},#{code,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR},#{basePath,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateApplication" parameterType="com.shine.entity.ims.Application" >
+    update application
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="basePath != null" >
+        basePath = #{basePath,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+    <delete id="deleteApplication">
+  	 DELETE FROM application WHERE id in
+  	 <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+  	 	#{item}
+  	 </foreach>
+  	 </delete>
+  	 
+  	<select id="findApplicationById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select * from application where id=#{id}
+  </select>
+  
+  <sql id="whereStatement">
+  	<where>
+    	1=1
+    	<if test="name!=null and name!='' ">
+    		and name like CONCAT('%','${name}','%')
+    	</if>
+    	<if test="code!=null and  code!='' ">
+    		and code like CONCAT('%', '${code}','%')
+    	</if>
+    	<if test="basePath!=null and  basePath!='' ">
+    		and basePath like CONCAT('%','${basePath}','%')
+    	</if>
+    	 <if test="description!=null and description!='' ">
+    		and basePath like CONCAT('%','${basePath}','%')
+    	</if>
+    </where>
+  </sql> 
+  
+  
+  <select id="searchApplication" resultType="com.shine.entity.ims.Application" parameterType="com.shine.condition.ims.ApplicationCondition">
+    select a.* from (select 
+    <include refid="Base_Column_List" />
+    from application
+    <include refid="whereStatement" />
+    ) a
+  </select>
+  
+</mapper>
